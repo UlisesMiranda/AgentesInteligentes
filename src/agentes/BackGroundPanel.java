@@ -24,5 +24,4 @@ public class BackGroundPanel extends JPanel {
         setOpaque(false);
         super.paintComponent(g);
     }
-
 }

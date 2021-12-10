@@ -81,9 +81,6 @@ public class Agente extends Thread {
                 if (matrix[i][j - 1] == 0) {
                     moverIzquierda();
                 }
-                break;
-            default:
-                break;
         }
     }
 
