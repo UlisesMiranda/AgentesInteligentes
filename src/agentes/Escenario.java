@@ -136,7 +136,7 @@ public class Escenario extends JFrame
     private void formaPlano()
     {
         tablero = new JLabel[dim][dim];
-        matrix = new int[dim][dim];
+        matrix = new int[dim+1][dim+1];
         
         int i, j;
         
@@ -167,6 +167,7 @@ public class Escenario extends JFrame
                     });
                                 
             }
+        imprimirMatrix(matrix);
     }
         
     private void gestionaObstacle(ItemEvent eventObject)
@@ -202,7 +203,21 @@ public class Escenario extends JFrame
     public void insertaObjeto(MouseEvent e)
     {
         JLabel casilla = (JLabel) e.getSource();
-        if(actualIcon!=null) casilla.setIcon(actualIcon); 
+        if(actualIcon!=null) { 
+            casilla.setIcon(actualIcon);
+            matrix[(casilla.getY()-10)/50][(casilla.getX()-10)/50] = 1;
+            System.out.println("");
+            imprimirMatrix(matrix);
+        }
+    }
+    
+    public void imprimirMatrix (int matriz[][]) {
+        for (int i = 0; i < matriz.length; i++) {
+            for (int j = 0; j < matriz[i].length; j++) {
+                System.out.print(matriz[i][j]);
+            }
+            System.out.println("");
+        }
     }
     
 }

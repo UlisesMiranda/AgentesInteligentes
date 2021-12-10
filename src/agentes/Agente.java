@@ -80,33 +80,44 @@ public class Agente extends Thread
         int opcMovimiento = random.nextInt(4) + 1;
         
         switch (opcMovimiento) {
-            case 1 -> moverArriba();
-            case 2 -> moverAbajo();
-            case 3 -> moverDerecha();
-            case 4 -> moverIzquierda();
-            default -> {
-            }
+            case 1: 
+                if ( matrix[i-1][j] == 0 )
+                    moverArriba();
+                break;
+            case 2:
+                if ( matrix[i+1][j] == 0 )
+                    moverAbajo();
+                break;
+            case 3:
+                if ( matrix[i][j+1] == 0 )
+                    moverDerecha();
+                break;
+            case 4: 
+                if ( matrix[i][j-1] == 0 )
+                    moverIzquierda();
+                break;
+            default:
+                break;
         }
     }
     
-    public int moverArriba() {
+    public void moverArriba() {
+        
         i = i - 1;
-        return i;
     }
 
-    public int moverAbajo() {
+    public void moverAbajo() {
         i = i + 1;
-        return i;
+      
     }
 
-    public int moverIzquierda() {
+    public void moverIzquierda() {
         j = j - 1;
-        return j;
+        
     }
 
-    public int moverDerecha() {
+    public void moverDerecha() {
         j = j + 1;
-        return j;
     }
     
     public void siChoquesBordes() {
@@ -120,23 +131,19 @@ public class Agente extends Thread
             chocaIzquierda();
     }
     
-    public int chocaAbajo() {
+    public void chocaAbajo() {
         i = i - 1;
-        return i;
     }
     
-    public int chocaArriba() {
+    public void chocaArriba() {
         i = i + 1;
-        return i;
     }
     
-    public int chocaDerecha() {
+    public void chocaDerecha() {
         j = j - 1;
-        return j;
     }
     
-    public int chocaIzquierda() {
+    public void chocaIzquierda() {
         j = j + 1;
-        return j;
     }
 }
