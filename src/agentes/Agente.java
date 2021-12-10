@@ -48,15 +48,9 @@ public class Agente extends Thread
         {
 
             casillaAnterior = tablero[i][j];
-               
-            if(i > matrix.length-2 && dirRow == 1) dirRow=-1;
-            if(i < 1 && dirRow==-1) dirRow=1;
-
-            if(j > matrix.length-2 && dirCol ==1) dirCol=-1;
-            if(j < 1 && dirCol==-1) dirCol=1;
-                            
-            i=i+dirRow;
-            j=j+dirCol;
+            
+            movimientoRandom();
+            siChoquesBordes();
                             
             actualizarPosicion();
                 
@@ -80,4 +74,69 @@ public class Agente extends Thread
         System.out.println(nombre + " in -> Row: " + i + " Col:"+ j);              
     }
     
+    public void movimientoRandom () {
+        Random random = new Random();
+        
+        int opcMovimiento = random.nextInt(4) + 1;
+        
+        switch (opcMovimiento) {
+            case 1 -> moverArriba();
+            case 2 -> moverAbajo();
+            case 3 -> moverDerecha();
+            case 4 -> moverIzquierda();
+            default -> {
+            }
+        }
+    }
+    
+    public int moverArriba() {
+        i = i - 1;
+        return i;
+    }
+
+    public int moverAbajo() {
+        i = i + 1;
+        return i;
+    }
+
+    public int moverIzquierda() {
+        j = j - 1;
+        return j;
+    }
+
+    public int moverDerecha() {
+        j = j + 1;
+        return j;
+    }
+    
+    public void siChoquesBordes() {
+        if(i > matrix.length-2)
+            chocaAbajo();
+        if(i < 1 )
+            chocaArriba();
+        if(j > matrix.length-2) 
+            chocaDerecha();
+        if(j < 1 )
+            chocaIzquierda();
+    }
+    
+    public int chocaAbajo() {
+        i = i - 1;
+        return i;
+    }
+    
+    public int chocaArriba() {
+        i = i + 1;
+        return i;
+    }
+    
+    public int chocaDerecha() {
+        j = j - 1;
+        return j;
+    }
+    
+    public int chocaIzquierda() {
+        j = j + 1;
+        return j;
+    }
 }

@@ -31,7 +31,7 @@ public class Escenario extends JFrame
     
     private JLabel[][] tablero;     
     private int[][] matrix;
-    private final int dim = 15;
+    private final int dim = 8;
 
     private ImageIcon robot1;
     private ImageIcon robot2;
