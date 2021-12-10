@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package agentes;
 
 import java.awt.Color;
@@ -22,10 +18,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 
-/**
- *
- * @author macario
- */
 public class Escenario extends JFrame {
 
     private JLabel[][] tablero;
