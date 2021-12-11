@@ -14,7 +14,7 @@ public class Agente extends Thread {
     JLabel tablero[][];
 
     JLabel casillaAnterior;
-    Random aleatorio = new Random(System.currentTimeMillis());
+    Random aleatorio = new Random();
 
     public Agente(String nombre, ImageIcon icon, int[][] matrix, JLabel tablero[][]) {
         this.nombre = nombre;
@@ -63,9 +63,10 @@ public class Agente extends Thread {
 
         switch (opcMovimiento) {
             case 1:
-                if (matrix[i - 1][j] == 0) {
-                    moverArriba();
-                }
+                if ( i - 1 > -1)
+                    if (matrix[i - 1][j] == 0) {
+                        moverArriba();
+                    }
                 break;
             case 2:
                 if (matrix[i + 1][j] == 0) {
@@ -78,9 +79,10 @@ public class Agente extends Thread {
                 }
                 break;
             case 4:
-                if (matrix[i][j - 1] == 0) {
-                    moverIzquierda();
-                }
+                if ( j - 1 > -1)
+                    if (matrix[i][j - 1] == 0) {
+                        moverIzquierda();
+                    }
         }
     }
 
@@ -107,13 +109,13 @@ public class Agente extends Thread {
         if (i > matrix.length - 2) {
             chocaAbajo();
         }
-        if (i < 1) {
+        if (i < 0) {
             chocaArriba();
         }
         if (j > matrix.length - 2) {
             chocaDerecha();
         }
-        if (j < 1) {
+        if (j < 0) {
             chocaIzquierda();
         }
     }
