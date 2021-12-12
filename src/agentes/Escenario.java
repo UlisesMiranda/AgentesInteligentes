@@ -30,6 +30,7 @@ public class Escenario extends JFrame {
     private ImageIcon sampleIcon;
     private ImageIcon actualIcon;
     private ImageIcon motherIcon;
+    public int contadorMuestras = 0;
 
     private Agente wallE;
     private Agente eva;
@@ -138,7 +139,7 @@ public class Escenario extends JFrame {
                 {
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        insertaObjeto(e);
+                        
                     }
 
                     @Override
@@ -192,9 +193,20 @@ public class Escenario extends JFrame {
 
     public void insertaObjeto(MouseEvent e) {
         JLabel casilla = (JLabel) e.getSource();
+        
         if (actualIcon != null) {
+            
             casilla.setIcon(actualIcon);
-            matrix[(casilla.getY() - 10) / 50][(casilla.getX() - 10) / 50] = 1;
+            
+            if(actualIcon == obstacleIcon)
+                matrix[(casilla.getY() - 10) / 50][(casilla.getX() - 10) / 50] = 1;
+            if(actualIcon == motherIcon)
+                matrix[(casilla.getY() - 10) / 50][(casilla.getX() - 10) / 50] = 2;
+            if(actualIcon == sampleIcon) {
+                matrix[(casilla.getY() - 10) / 50][(casilla.getX() - 10) / 50] = 3;
+                contadorMuestras++;
+                System.out.println("muestras" + contadorMuestras);
+            }
             System.out.println("");
             imprimirMatrix(matrix);
         }
