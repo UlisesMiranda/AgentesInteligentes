@@ -14,15 +14,15 @@ public class Agente extends Thread {
     ImageIcon icon;
     int[][] matrix;
     JLabel tablero[][];
-    int traeMuestra ;
+    int traeMuestra;
     private int contadorMuestras;
     private Agente agenteDos;
-    
+
     ImageIcon sampleIcon = new ImageIcon("imagenes/sample.png");
     ImageIcon motherIcon = new ImageIcon("imagenes/mothership.png");
 
     JLabel casillaAnterior;
-    int idIconoAnterior;
+    int idIconoAnterior, radio;
     Random aleatorio = new Random();
 
     public Agente(String nombre, ImageIcon icon, int[][] matrix, JLabel tablero[][]) {
@@ -30,11 +30,11 @@ public class Agente extends Thread {
         this.icon = icon;
         this.matrix = matrix;
         this.tablero = tablero;
-
-        this.i = aleatorio.nextInt(matrix.length)-1;
-        this.j = aleatorio.nextInt(matrix.length)-1;
-        tablero[i][j].setIcon(icon);
         
+        this.i = aleatorio.nextInt(matrix.length) - 1;
+        this.j = aleatorio.nextInt(matrix.length) - 1;
+        tablero[i][j].setIcon(icon);
+
     }
 
     public void run() {
@@ -43,22 +43,29 @@ public class Agente extends Thread {
         int dirCol = 1;
 
         while (true) {
-            
-            System.out.println("contador muestras "+ contadorMuestras);
-            
+
+            System.out.println("contador muestras " + contadorMuestras);
+
             casillaAnterior = tablero[i][j];
             idIconoAnterior = matrix[i][j];
+            
+           
+                movimientoRandom();
+            
 
-            movimientoRandom();
-            siChoquesBordes();
+            if (traeMuestra == 1) {
+                Point point = BuscarNave();
+                viajarANave(point.x, point.y);
+                siChoquesBordes();
+            }
             
             if (detectaMuestra(i, j) && traeMuestra != 1) {
                 System.out.println("recogiendo muestra");
                 recogeMuestra();
-                disminuirContadorMuestras();
             }
             
-            if(traeMuestra == 1 && estaEnNave()) {
+
+            if (traeMuestra == 1 && estaEnNave()) {
                 System.out.println("dejandomuestra");
                 traeMuestra = 0;
             }
@@ -75,21 +82,21 @@ public class Agente extends Thread {
     }
 
     public synchronized void actualizarPosicion() {
-        if(idIconoAnterior == 0) {
+        if (idIconoAnterior == 0) {
             casillaAnterior.setIcon(null); // Elimina su figura de la casilla anterior
         }
         if (idIconoAnterior == 3) {
             sampleIcon = new ImageIcon(sampleIcon.getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH));
             casillaAnterior.setIcon(sampleIcon);
         }
-        if(idIconoAnterior == 2){
+        if (idIconoAnterior == 2) {
             motherIcon = new ImageIcon(motherIcon.getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH));
             casillaAnterior.setIcon(motherIcon);
-        }  
-            tablero[i][j].setIcon(icon); // Pone su figura en la nueva casilla
+        }
+        tablero[i][j].setIcon(icon); // Pone su figura en la nueva casilla
         System.out.println(nombre + " in -> Row: " + i + " Col:" + j);
     }
-    
+
     public synchronized void disminuirContadorMuestras() {
         contadorMuestras--;
     }
@@ -101,70 +108,309 @@ public class Agente extends Thread {
 
         switch (opcMovimiento) {
             case 1:
-                if ( i - 1 > -1)
+                if (i - 1 > -1) {
                     moverArriba();
+                }
                 break;
             case 2:
-                    moverAbajo();
+                moverAbajo();
                 break;
             case 3:
-                    moverDerecha();
+                moverDerecha();
                 break;
             case 4:
-                if ( j - 1 > -1)
+                if (j - 1 > -1) {
                     moverIzquierda();
+                }
                 break;
         }
     }
+
+    public void movimientoRandomSinArriba() {
+        Random random = new Random();
+
+        int opcMovimiento = random.nextInt(3) + 1;
+
+        switch (opcMovimiento) {
+            case 1:
+                moverAbajo();
+                break;
+            case 2:
+                moverDerecha();
+                break;
+            case 3:
+                if (j - 1 > -1) {
+                    moverIzquierda();
+                }
+                break;
+        }
+    }
+
+    public void movimientoRandomSinAbajo() {
+        Random random = new Random();
+
+        int opcMovimiento = random.nextInt(3) + 1;
+
+        switch (opcMovimiento) {
+            case 1:
+                if (i - 1 > -1) {
+                    moverArriba();
+                }
+                break;
+            case 2:
+                moverDerecha();
+                break;
+            case 3:
+                if (j - 1 > -1) {
+                    moverIzquierda();
+                }
+                break;
+        }
+    }
+
+    public void movimientoRandomsinDerecha() {
+        Random random = new Random();
+
+        int opcMovimiento = random.nextInt(3) + 1;
+
+        switch (opcMovimiento) {
+            case 1:
+                if (i - 1 > -1) {
+                    moverArriba();
+                }
+                break;
+            case 2:
+                moverAbajo();
+                break;
+            case 3:
+                if (j - 1 > -1) {
+                    moverIzquierda();
+                }
+                break;
+        }
+    }
+
+    public void movimientoRandomSinIzquierda() {
+        Random random = new Random();
+
+        int opcMovimiento = random.nextInt(4) + 1;
+
+        switch (opcMovimiento) {
+            case 1:
+                if (i - 1 > -1) {
+                    moverArriba();
+                }
+                break;
+            case 2:
+                moverAbajo();
+                break;
+            case 3:
+                moverDerecha();
+                break;
+        }
+    }
+
     public boolean detectaMuestra(int i, int j) {
-        if(matrix[i][j] == 3 ) {
+        if (matrix[i][j] == 3) {
             return true;
         }
         return false;
     }
-    
-    public void recogeMuestra () {
+
+    public void recogeMuestra() {
         matrix[i][j] = 0;
         System.out.println("recogio la muestra");
         traeMuestra = 1;
     }
-    
-    public boolean estaEnNave () {
+
+    public boolean estaEnNave() {
         if (matrix[i][j] == 2) {
             return true;
         }
         return false;
     }
-    
-    public void viajarNave() {
-        
+
+    public Point BuscarNave() {
+        ArrayList<Point> coordenadas = new ArrayList<>(); // matriz con las distancias de cada basura
+        radio = 0; // radio de barrido del robot
+
+        // El radio crece de 1, 2, 3 hasta que encuentra basura
+        while (true) {
+            radio++;
+
+            for (int d = 0; d <= radio; d++) {
+                if (condicionExiste(i + d, j - radio) && matrix[i + d][j - radio] == 2) {
+                    coordenadas.add(new Point(d, -radio));
+                }
+                if (condicionExiste(i - d, j + radio) && matrix[i - d][j + radio] == 2) {
+                    coordenadas.add(new Point(-d, radio));
+                }
+                if (condicionExiste(i - radio, j - d) && matrix[i - radio][j - d] == 2) {
+                    coordenadas.add(new Point(-radio, -d));
+                }
+                if (condicionExiste(i + radio, j + d) && matrix[i + radio][j + d] == 2) {
+                    coordenadas.add(new Point(radio, d));
+                }
+                if (d != 0 || d != radio) {
+                    if (condicionExiste(i - d, j - radio) && matrix[i - d][j - radio] == 2) {
+                        coordenadas.add(new Point(-d, -radio));
+                    }
+                    if (condicionExiste(i + d, j + radio) && matrix[i + d][j + radio] == 2) {
+                        coordenadas.add(new Point(d, radio));
+                    }
+                    if (condicionExiste(i - radio, j + d) && matrix[i - radio][j + d] == 2) {
+                        coordenadas.add(new Point(-radio, d));
+                    }
+                    if (condicionExiste(i + radio, j - d) && matrix[i + radio][j - d] == 2) {
+                        coordenadas.add(new Point(radio, -d));
+                    }
+                }
+                // Cuando vea basura, el agente devolverá la distancia entre el robot y la basura
+                if (!coordenadas.isEmpty()) {
+                    Random random = new Random();
+                    return coordenadas.get(random.nextInt(coordenadas.size()));
+                }
+            }
+        }
+    }
+
+    private boolean condicionExiste(int x, int y) {
+        if (0 <= x && x < matrix.length - 2 && 0 <= y && y < matrix.length - 2) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void viajarANave(int filaBuscada, int columnaBuscada) {
+        if (filaBuscada != 0 && columnaBuscada != 0) {
+            moverFila(filaBuscada);
+            moverColumna(columnaBuscada);
+            return;
+        }
+
+        if (filaBuscada == 0) {
+            moverColumna(columnaBuscada);
+            return;
+        }
+
+        if (columnaBuscada == 0) {
+            moverFila(filaBuscada);
+            return;
+        }
+    }
+
+    private void moverColumna(int columna) {
+        if (columna > 0) {
+            while (columna-- != 0) {
+                if (noObstaculoDerecha()) {
+                    siChoquesBordes();
+                    moverDerecha();
+                } else {
+                    movimientoRandomsinDerecha();
+                    columna++;
+                }
+            }
+        } else {
+            while (columna++ != 0) {
+                if (noObstaculoIzquierda()) {
+                    siChoquesBordes();
+                    moverIzquierda();
+                } else {
+                    movimientoRandomSinIzquierda();
+                    columna--;
+                }
+            }
+        }
+    }
+
+    private void moverFila(int fila) {
+        if (fila > 0) {
+            while (fila-- != 0) {
+                if (noObstaculoAbajo()) {
+                    siChoquesBordes();
+                    moverAbajo();
+                } else {
+                    movimientoRandomSinAbajo();
+                    fila++;
+                }
+            }
+        } else {
+            if (fila < 0) {
+                while (fila++ != 0) {
+                    if (noObstaculoArriba()) {
+                        siChoquesBordes();
+                        moverArriba();
+                    } else {
+                        movimientoRandomSinArriba();
+                        fila--;
+                    }
+                }
+            }
+        }
+    }
+
+    public boolean noObstaculoArriba() {
+        return (matrix[i - 1][j] != 1 && i-1 >= 0);
+    }
+
+    public boolean noObstaculoAbajo() {
+        return (matrix[i + 1][j] != 1 &&  i +1 < matrix.length - 2);
+    }
+
+    public boolean noObstaculoIzquierda() {
+        return (matrix[i][j - 1] != 1 && j - 1>=0);
+    }
+
+    public boolean noObstaculoDerecha() {
+        return (matrix[i][j + 1] != 1 && j+1 <  matrix.length - 1);
     }
 
     public void moverArriba() {
-        if (matrix[i - 1][j] != 1)
+        if (noObstaculoArriba()) {
             i = i - 1;
+        }
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ex) {
+        }
     }
 
     public void moverAbajo() {
-        if (matrix[i + 1][j] != 1)
+        if (noObstaculoAbajo()) {
             i = i + 1;
+        }
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ex) {
+        }
     }
 
     public void moverIzquierda() {
-        if (matrix[i][j - 1] != 1)
+        if (noObstaculoIzquierda()) {
             j = j - 1;
+        }
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ex) {
+        }
     }
 
     public void moverDerecha() {
-        if (matrix[i][j + 1] != 1)
+        if (noObstaculoDerecha()) {
             j = j + 1;
+        }
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ex) {
+        }        
     }
 
     public void siChoquesBordes() {
         if (i > matrix.length - 2) {
             chocaAbajo();
         }
-        if (i < 0) {
+        if (i <= 0) {
             chocaArriba();
         }
         if (j > matrix.length - 2) {
@@ -193,6 +439,6 @@ public class Agente extends Thread {
 
     public int getContadorMuestras() {
         return contadorMuestras;
-    }    
-    
+    }
+
 }
