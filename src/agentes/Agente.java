@@ -41,9 +41,6 @@ public class Agente extends Thread {
 
     public void run() {
 
-        int dirRow = 1;
-        int dirCol = 1;
-
         while (true) {
 
             casillaAnterior = tablero[i][j];
@@ -215,10 +212,7 @@ public class Agente extends Thread {
     }
 
     public boolean detectaMuestra(int i, int j) {
-        if (matrix[i][j] == 3) {
-            return true;
-        }
-        return false;
+        return matrix[i][j] == 3;
     }
 
     public void recogeMuestra() {
@@ -228,10 +222,7 @@ public class Agente extends Thread {
     }
 
     public boolean estaEnNave() {
-        if (matrix[i][j] == 2) {
-            return true;
-        }
-        return false;
+        return matrix[i][j] == 2;
     }
 
     public Point BuscarNave() {
@@ -277,11 +268,7 @@ public class Agente extends Thread {
     }
 
     private boolean condicionExiste(int x, int y) {
-        if (0 <= x && x < matrix.length - 2 && 0 <= y && y < matrix.length - 2) {
-            return true;
-        } else {
-            return false;
-        }
+        return 0 <= x && x < matrix.length - 2 && 0 <= y && y < matrix.length - 2;
     }
 
     public void viajarANave(int filaBuscada, int columnaBuscada) throws InterruptedException {
@@ -388,7 +375,7 @@ public class Agente extends Thread {
     }
 
     public boolean noObstaculoAbajo() {
-        return (matrix[i + 1][j] != 1 &&  i +1 < matrix.length - 2);
+        return (matrix[i + 1][j] != 1 &&  i +1 < matrix.length - 1);
     }
 
     public boolean noObstaculoIzquierda() {
