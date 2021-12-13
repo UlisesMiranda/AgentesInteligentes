@@ -31,8 +31,8 @@ public class Agente extends Thread {
         this.matrix = matrix;
         this.tablero = tablero;
         
-        this.i = aleatorio.nextInt(matrix.length) - 1;
-        this.j = aleatorio.nextInt(matrix.length) - 1;
+        this.i = aleatorio.nextInt(matrix.length-1);
+        this.j = aleatorio.nextInt(matrix.length-1);
         tablero[i][j].setIcon(icon);
 
     }
@@ -231,10 +231,9 @@ public class Agente extends Thread {
     }
 
     public Point BuscarNave() {
-        ArrayList<Point> coordenadas = new ArrayList<>(); // matriz con las distancias de cada basura
-        radio = 0; // radio de barrido del robot
+        ArrayList<Point> coordenadas = new ArrayList<>(); 
+        radio = 0; 
 
-        // El radio crece de 1, 2, 3 hasta que encuentra basura
         while (true) {
             radio++;
 
@@ -265,7 +264,6 @@ public class Agente extends Thread {
                         coordenadas.add(new Point(radio, -d));
                     }
                 }
-                // Cuando vea basura, el agente devolverá la distancia entre el robot y la basura
                 if (!coordenadas.isEmpty()) {
                     Random random = new Random();
                     return coordenadas.get(random.nextInt(coordenadas.size()));
