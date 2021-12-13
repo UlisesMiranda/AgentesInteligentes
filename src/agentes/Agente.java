@@ -3,6 +3,8 @@ package agentes;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -44,19 +46,21 @@ public class Agente extends Thread {
 
         while (true) {
 
-            System.out.println("contador muestras " + contadorMuestras);
-
             casillaAnterior = tablero[i][j];
             idIconoAnterior = matrix[i][j];
             
-           
-                movimientoRandom();
+            movimientoRandom();
+            actualizarPosicion();
             
 
             if (traeMuestra == 1) {
-                Point point = BuscarNave();
-                viajarANave(point.x, point.y);
-                siChoquesBordes();
+                try {
+                    Point point = BuscarNave();
+                    viajarANave(point.x, point.y);
+                    siChoquesBordes();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Agente.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             
             if (detectaMuestra(i, j) && traeMuestra != 1) {
@@ -280,7 +284,7 @@ public class Agente extends Thread {
         }
     }
 
-    public void viajarANave(int filaBuscada, int columnaBuscada) {
+    public void viajarANave(int filaBuscada, int columnaBuscada) throws InterruptedException {
         if (filaBuscada != 0 && columnaBuscada != 0) {
             moverFila(filaBuscada);
             moverColumna(columnaBuscada);
@@ -298,51 +302,82 @@ public class Agente extends Thread {
         }
     }
 
-    private void moverColumna(int columna) {
+    private void moverColumna(int columna) throws InterruptedException {
         if (columna > 0) {
             while (columna-- != 0) {
+                
                 if (noObstaculoDerecha()) {
+                    casillaAnterior = tablero[i][j];
+                    idIconoAnterior = matrix[i][j];
+                    
                     siChoquesBordes();
                     moverDerecha();
                 } else {
+                    casillaAnterior = tablero[i][j];
+                    idIconoAnterior = matrix[i][j];
+                    
                     movimientoRandomsinDerecha();
                     columna++;
                 }
+                actualizarPosicion();
             }
         } else {
             while (columna++ != 0) {
                 if (noObstaculoIzquierda()) {
+                    casillaAnterior = tablero[i][j];
+                    idIconoAnterior = matrix[i][j];
+                    
                     siChoquesBordes();
                     moverIzquierda();
                 } else {
+                    casillaAnterior = tablero[i][j];
+                    idIconoAnterior = matrix[i][j];
+                    
                     movimientoRandomSinIzquierda();
                     columna--;
                 }
+                actualizarPosicion();
+
             }
         }
     }
 
-    private void moverFila(int fila) {
+    private void moverFila(int fila) throws InterruptedException {
         if (fila > 0) {
             while (fila-- != 0) {
+                
                 if (noObstaculoAbajo()) {
+                    casillaAnterior = tablero[i][j];
+                    idIconoAnterior = matrix[i][j];
+                    
                     siChoquesBordes();
                     moverAbajo();
                 } else {
+                    casillaAnterior = tablero[i][j];
+                    idIconoAnterior = matrix[i][j];
+                    
                     movimientoRandomSinAbajo();
                     fila++;
                 }
+                actualizarPosicion();
             }
         } else {
             if (fila < 0) {
                 while (fila++ != 0) {
                     if (noObstaculoArriba()) {
+                        casillaAnterior = tablero[i][j];
+                        idIconoAnterior = matrix[i][j];
+                    
                         siChoquesBordes();
                         moverArriba();
                     } else {
+                        casillaAnterior = tablero[i][j];
+                        idIconoAnterior = matrix[i][j];
+                        
                         movimientoRandomSinArriba();
                         fila--;
                     }
+                    actualizarPosicion();
                 }
             }
         }
